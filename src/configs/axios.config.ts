@@ -2,7 +2,7 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 
 const instance = axios.create({
-  baseURL: "http://192.168.1.17:5000/api/",
+  baseURL: "http://192.168.1.2:5000/api/",
   // baseURL: 'http://petpals.scats.tk/api/v1/',
   withCredentials: true,
 });
