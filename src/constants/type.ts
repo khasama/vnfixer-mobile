@@ -64,14 +64,57 @@ export const cities = [
   "Yên Bái",
 ];
 
+export enum RequestStatus {
+  PENDING = "PENDING",
+  ACCEPT = "ACCEPT",
+  DONE = "DONE",
+  CANCEL = "CANCEL",
+}
+
+export enum RoleType {
+  ADMIN = "ADMIN",
+  CUSTOMER = "CUSTOMER",
+  AGENCY = "AGENCY",
+}
+
+export enum AgencyRoleType {
+  STAFF = "STAFF",
+  MANAGER = "MANAGER",
+}
+
+export interface IUser {
+  id?: number;
+  email: string;
+  phone?: string;
+  address?: string;
+  fullName?: string;
+  imageUrl?: string;
+  active: boolean;
+  role: RoleType;
+  branchId: number | null;
+  agencyRole: AgencyRoleType | null;
+}
+
 export interface ICategory {
-  id: string;
+  id: number;
   name: string;
   description: string;
 }
 
 export interface IRequest {
-  id: string;
+  id?: string;
+  title: string;
+  description: string;
+  city: string;
+  location: string;
+  expectDate: string[];
+  categoryId: number;
+  status?: RequestStatus;
+  branchId?: number | null;
+  customerPhone: string;
+  customerName: string;
+  customerEmail: string;
+  userId?: number;
 }
 
 export interface IBranch {
@@ -79,6 +122,7 @@ export interface IBranch {
   city: string;
   address: string;
   requests: IRequest[];
+  users: IUser[];
 }
 
 export interface IAgency {
@@ -87,5 +131,13 @@ export interface IAgency {
   description: string;
   logo: string;
   category: ICategory;
+  ratings: IRating[];
   branches: IBranch[];
+}
+
+export interface IRating {
+  id: string;
+  userId: number;
+  agencyId: number;
+  rating: number;
 }

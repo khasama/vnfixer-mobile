@@ -1,11 +1,24 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header/Header";
 import Section from "../components/Section/Section";
+import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { getCategories } from "../redux/reducers/category";
+import { AppDispatch } from "../redux/store";
 
 const Home = () => {
   const insets = useSafeAreaInsets();
+  const dispatch = useDispatch<AppDispatch>();
+  useEffect(() => {
+    dispatch(getCategories())
+      .then(unwrapResult)
+      .catch((err: string) => {
+        ToastAndroid.show(err, ToastAndroid.SHORT);
+      });
+  }, []);
+
   return (
     <View style={{ flex: 1, paddingTop: insets.top }}>
       <View>

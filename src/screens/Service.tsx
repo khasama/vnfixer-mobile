@@ -16,18 +16,21 @@ import getCategories from "../api/getCategories";
 import getAgencies from "../api/getAgencies";
 import Card from "../components/Card/Card";
 import { cities } from "../constants/type";
+import { useDispatch, useSelector } from "react-redux";
+import { categoriesSelector } from "../redux/selectors";
 const { width, height } = Dimensions.get("window");
 const Service = () => {
   const insets = useSafeAreaInsets();
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [agencies, setAgencies] = useState([]);
+  const categories = useSelector(categoriesSelector);
 
-  const callApiGetCategories = useCallback(async () => {
-    const categories = await getCategories();
-    setCategories(categories.data);
-  }, []);
+  // const callApiGetCategories = useCallback(async () => {
+  //   const categories = await getCategories();
+  //   setCategories(categories.data);
+  // }, []);
 
   const callApiGetAgencies = useCallback(async (filter: object) => {
     const agencies = await getAgencies(filter);
@@ -35,7 +38,7 @@ const Service = () => {
   }, []);
 
   useEffect(() => {
-    callApiGetCategories();
+    // callApiGetCategories();
   }, []);
   return (
     <View style={{ flex: 1, paddingTop: insets.top }}>
