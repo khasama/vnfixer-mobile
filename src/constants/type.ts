@@ -99,6 +99,8 @@ export interface ICategory {
   id: number;
   name: string;
   description: string;
+  requests?: IRequest[];
+  agencies?: IAgency[];
 }
 
 export interface IRequest {

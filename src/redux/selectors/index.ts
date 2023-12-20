@@ -1,3 +1,2 @@
-import { categoriesSelector } from "./category";
-
-export { categoriesSelector };
+export * from "./category";
+export * from "./auth";

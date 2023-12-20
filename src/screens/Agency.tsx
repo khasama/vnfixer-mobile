@@ -19,6 +19,7 @@ import { Calendar } from "react-native-calendars";
 import CalendarModal from "../components/Modals/CalendarModal";
 import CreateRequestModal from "../components/Modals/CreateRequestModal";
 import Branch from "../components/Branch/Branch";
+import CreateRequest from "../components/CreateRequest";
 
 type AgencyProps = {
   navigation: StackNavigation;
@@ -31,8 +32,6 @@ const Agnecy = (props: AgencyProps) => {
   const [agency, setAgency] = useState<IAgency | null>(null);
   const [visibleCreateRequestModal, setVisibleCreateRequestModal] =
     useState(false);
-  const [visibleCalendarModal, setVisibleCalendarModal] = useState(false);
-  const [expectDays, setExpectDays] = useState<string[]>([]);
 
   const callApiGetAgency = useCallback(
     async (id: string) => {
@@ -40,17 +39,6 @@ const Agnecy = (props: AgencyProps) => {
       setAgency(agency.data);
     },
     [id]
-  );
-
-  const changeExpectDays = useCallback(
-    (day: string) => {
-      if (expectDays.includes(day)) {
-        setExpectDays(expectDays.filter((d) => d !== day));
-      } else {
-        setExpectDays((expectDays) => [...expectDays, day]);
-      }
-    },
-    [expectDays]
   );
 
   const imageSource = useMemo(() => {
@@ -73,41 +61,16 @@ const Agnecy = (props: AgencyProps) => {
     return (total / agency.ratings.length).toFixed(2);
   }, [agency]);
 
-  const expectDaysValue: string = useMemo(() => {
-    return expectDays.join(", ");
-  }, [expectDays]);
-
-  const expectDaysMark = useMemo(() => {
-    const markedDates: Record<string, any> = {};
-    for (let i = 0; i < expectDays.length; i++) {
-      markedDates[expectDays[i]] = {
-        selected: true,
-        selectedColor: "#00adf5",
-      };
-    }
-    return markedDates;
-  }, [expectDays]);
-
   useEffect(() => {
     callApiGetAgency(id);
   }, [agency]);
   return (
     <Provider>
-      <Portal>
-        <CreateRequestModal
-          agency={agency}
-          expectDaysValue={expectDaysValue}
-          setVisibleCalendarModal={setVisibleCalendarModal}
-          setVisibleCreateRequestModal={setVisibleCreateRequestModal}
-          visibleCreateRequestModal={visibleCreateRequestModal}
-        />
-        <CalendarModal
-          changeExpectDays={changeExpectDays}
-          expectDaysMark={expectDaysMark}
-          setVisibleCalendarModal={setVisibleCalendarModal}
-          visibleCalendarModal={visibleCalendarModal}
-        />
-      </Portal>
+      <CreateRequest
+        agency={agency}
+        setVisibleCreateRequestModal={setVisibleCreateRequestModal}
+        visibleCreateRequestModal={visibleCreateRequestModal}
+      />
       <View style={{ flex: 1, paddingTop: insets.top }}>
         <View>
           <Header allowBack={true} />

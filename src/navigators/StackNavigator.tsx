@@ -6,6 +6,7 @@ import Agencies from "../screens/Agencies";
 import Service from "../screens/Service";
 import Agency from "../screens/Agency";
 import Profile from "../screens/Profile";
+import Auth from "../screens/Auth";
 import { NavigationProp } from "@react-navigation/native";
 
 export type ScreenNames = [
@@ -13,10 +14,12 @@ export type ScreenNames = [
   "ProfileScreen",
   "AgenciesScreen",
   "ServiceScreen",
-  "AgencyScreen"
+  "AgencyScreen",
+  "AuthScreen"
 ];
 export type RootStackParamList = {
   HomeScreen: undefined;
+  AuthScreen: undefined;
   ProfileScreen: undefined;
   AgenciesScreen: undefined;
   ServiceScreen: undefined;
@@ -35,6 +38,7 @@ const HomeStackNavigator = () => {
       initialRouteName="HomeScreen"
     >
       <Stack.Screen name="HomeScreen" component={Home} />
+      <Stack.Screen name="AuthScreen" component={Auth} />
     </Stack.Navigator>
   );
 };
@@ -46,6 +50,7 @@ const ProfileStackNavigator = () => {
       initialRouteName="ProfileScreen"
     >
       <Stack.Screen name="ProfileScreen" component={Profile} />
+      <Stack.Screen name="AuthScreen" component={Auth} />
     </Stack.Navigator>
   );
 };

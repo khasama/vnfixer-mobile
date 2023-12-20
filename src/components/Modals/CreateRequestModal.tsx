@@ -6,6 +6,8 @@ import { IAgency, IRequest, cities } from "../../constants/type";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Formik } from "formik";
 import getCategories from "../../api/getCategories";
+import { categoriesSelector, currentUserSelector } from "../../redux/selectors";
+import { useSelector } from "react-redux";
 
 type CreateRequestModalProps = {
   expectDaysValue: string;
@@ -22,21 +24,11 @@ const CreateRequestModal = ({
   setVisibleCalendarModal,
   agency,
 }: CreateRequestModalProps) => {
+  const categories = useSelector(categoriesSelector);
+  const currentUser = useSelector(currentUserSelector);
   const citiesOfBraches = useMemo(() => {
     return agency?.branches.map((branch) => branch.city);
   }, [agency]);
-
-  // load from store
-  const [categories, setCategories] = useState([]);
-  const callApiGetCategories = useCallback(async () => {
-    const categories = await getCategories();
-    setCategories(categories.data);
-  }, []);
-  useEffect(() => {
-    if (!agency) {
-      callApiGetCategories();
-    }
-  }, []);
 
   return (
     <Modal
@@ -56,9 +48,9 @@ const CreateRequestModal = ({
           city: "",
           location: "",
           categoryId: 0,
-          customerPhone: "",
-          customerName: "",
-          customerEmail: "",
+          customerPhone: currentUser.phone || "",
+          customerName: currentUser.fullName || "",
+          customerEmail: currentUser.email || "",
         }}
         onSubmit={(values) => {
           const request: IRequest = {

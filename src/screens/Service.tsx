@@ -1,45 +1,27 @@
-import {
-  Dimensions,
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useState } from "react";
 import Header from "../components/Header/Header";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import SelectDropdown from "react-native-select-dropdown";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import getCategories from "../api/getCategories";
 import getAgencies from "../api/getAgencies";
 import Card from "../components/Card/Card";
-import { cities } from "../constants/type";
-import { useDispatch, useSelector } from "react-redux";
+import { IAgency, cities } from "../constants/type";
+import { useSelector } from "react-redux";
 import { categoriesSelector } from "../redux/selectors";
 const { width, height } = Dimensions.get("window");
 const Service = () => {
   const insets = useSafeAreaInsets();
-  // const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
-  const [agencies, setAgencies] = useState([]);
+  const [agencies, setAgencies] = useState<IAgency[]>([]);
   const categories = useSelector(categoriesSelector);
-
-  // const callApiGetCategories = useCallback(async () => {
-  //   const categories = await getCategories();
-  //   setCategories(categories.data);
-  // }, []);
 
   const callApiGetAgencies = useCallback(async (filter: object) => {
     const agencies = await getAgencies(filter);
     setAgencies(agencies.data.entries);
   }, []);
 
-  useEffect(() => {
-    // callApiGetCategories();
-  }, []);
   return (
     <View style={{ flex: 1, paddingTop: insets.top }}>
       <View>
@@ -167,7 +149,7 @@ const Service = () => {
             }}
           >
             {!!agencies.length &&
-              agencies.map((e) => <Card key={e["id"]} agency={e} />)}
+              agencies.map((e) => <Card key={e.id} agency={e} />)}
           </View>
         </View>
       </ScrollView>
