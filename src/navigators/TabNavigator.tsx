@@ -16,6 +16,9 @@ const getRouteName = (route: any) => {
   const routeName = getFocusedRouteNameFromRoute(route);
   if (
     routeName?.includes("AuthScreen") ||
+    routeName?.includes("TakeRequestScreen") ||
+    routeName?.includes("InformationScreen") ||
+    routeName?.includes("MyRequestsScreen") ||
     routeName?.includes("AgencyScreen")
   ) {
     return "none";

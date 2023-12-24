@@ -7,6 +7,9 @@ import Service from "../screens/Service";
 import Agency from "../screens/Agency";
 import Profile from "../screens/Profile";
 import Auth from "../screens/Auth";
+import TakeRequest from "../screens/TakeRequest";
+import Information from "../screens/Information";
+import MyRequests from "../screens/MyRequests";
 import { NavigationProp } from "@react-navigation/native";
 
 export type ScreenNames = [
@@ -24,6 +27,9 @@ export type RootStackParamList = {
   AgenciesScreen: undefined;
   ServiceScreen: undefined;
   AgencyScreen: { id: string };
+  TakeRequestScreen: undefined;
+  InformationScreen: undefined;
+  MyRequestsScreen: undefined;
 };
 export type StackNavigation = NavigationProp<RootStackParamList>;
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -51,6 +57,9 @@ const ProfileStackNavigator = () => {
     >
       <Stack.Screen name="ProfileScreen" component={Profile} />
       <Stack.Screen name="AuthScreen" component={Auth} />
+      <Stack.Screen name="TakeRequestScreen" component={TakeRequest} />
+      <Stack.Screen name="InformationScreen" component={Information} />
+      <Stack.Screen name="MyRequestsScreen" component={MyRequests} />
     </Stack.Navigator>
   );
 };

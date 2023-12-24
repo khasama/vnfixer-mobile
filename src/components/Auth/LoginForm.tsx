@@ -33,7 +33,7 @@ const LoginForm = () => {
         .then(unwrapResult)
         .then((result) => {
           ToastAndroid.show("Đăng nhập thành công", ToastAndroid.SHORT);
-          navigation.navigate("ProfileScreen");
+          navigation.goBack();
         })
         .catch((err: string) => {
           ToastAndroid.show(err, ToastAndroid.SHORT);

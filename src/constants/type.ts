@@ -104,7 +104,7 @@ export interface ICategory {
 }
 
 export interface IRequest {
-  id?: string;
+  id?: number;
   title: string;
   description: string;
   city: string;
@@ -117,24 +117,27 @@ export interface IRequest {
   customerName: string;
   customerEmail: string;
   userId?: number;
+  category?: ICategory;
+  branch?: IBranch;
 }
 
 export interface IBranch {
-  id: string;
+  id: number;
   city: string;
   address: string;
   requests: IRequest[];
   users: IUser[];
+  agency?: IAgency;
 }
 
 export interface IAgency {
-  id: string;
+  id: number;
   name: string;
   description: string;
   logo: string;
   category: ICategory;
   ratings: IRating[];
-  branches: IBranch[];
+  branches?: IBranch[];
 }
 
 export interface IRating {

@@ -1,4 +1,10 @@
-import { GestureResponderEvent, StyleSheet, Text, View } from "react-native";
+import {
+  GestureResponderEvent,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  View,
+} from "react-native";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Button, Modal, TextInput } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
@@ -8,6 +14,7 @@ import { Formik } from "formik";
 import getCategories from "../../api/getCategories";
 import { categoriesSelector, currentUserSelector } from "../../redux/selectors";
 import { useSelector } from "react-redux";
+import createRequest from "../../api/createRequest";
 
 type CreateRequestModalProps = {
   expectDaysValue: string;
@@ -27,8 +34,18 @@ const CreateRequestModal = ({
   const categories = useSelector(categoriesSelector);
   const currentUser = useSelector(currentUserSelector);
   const citiesOfBraches = useMemo(() => {
+    if (!agency?.branches) {
+      return [];
+    }
     return agency?.branches.map((branch) => branch.city);
   }, [agency]);
+
+  const getBranchWithCity = useCallback(
+    (city: string) => {
+      return agency?.branches?.find((branch) => branch.city === city);
+    },
+    [agency]
+  );
 
   return (
     <Modal
@@ -48,19 +65,25 @@ const CreateRequestModal = ({
           city: "",
           location: "",
           categoryId: 0,
-          customerPhone: currentUser.phone || "",
-          customerName: currentUser.fullName || "",
-          customerEmail: currentUser.email || "",
+          customerPhone: currentUser?.phone || "",
+          customerName: currentUser?.fullName || "",
+          customerEmail: currentUser?.email || "",
         }}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           const request: IRequest = {
             ...values,
-            expectDate: expectDaysValue.split(","),
+            expectDate: expectDaysValue.replaceAll(" ", "").split(","),
           };
           if (agency) {
             request.categoryId = agency?.category.id;
+            request.branchId = getBranchWithCity(request.city)?.id;
           }
-          console.log({ request });
+          try {
+            await createRequest(request);
+            //reset form
+          } catch (error) {
+            ToastAndroid.show("err", ToastAndroid.SHORT);
+          }
         }}
       >
         {({ values, handleSubmit, handleChange, setFieldValue }) => (

@@ -9,17 +9,16 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "../components/Header/Header";
-import { IAgency, cities } from "../constants/type";
+import { IAgency } from "../constants/type";
 import { type StackNavigation } from "../navigators/StackNavigator";
 import getAgency from "../api/getAgencyInfo";
-import { Button, Modal, Portal, Provider, TextInput } from "react-native-paper";
+import { Button, Provider } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import SelectDropdown from "react-native-select-dropdown";
-import { Calendar } from "react-native-calendars";
-import CalendarModal from "../components/Modals/CalendarModal";
-import CreateRequestModal from "../components/Modals/CreateRequestModal";
 import Branch from "../components/Branch/Branch";
 import CreateRequest from "../components/CreateRequest";
+import { useNavigation } from "@react-navigation/native";
+import { isLoggedInSelector } from "../redux/selectors";
+import { useSelector } from "react-redux";
 
 type AgencyProps = {
   navigation: StackNavigation;
@@ -28,6 +27,7 @@ type AgencyProps = {
 const { width, height } = Dimensions.get("window");
 const Agnecy = (props: AgencyProps) => {
   const { id } = props.route.params;
+  const isLoggedIn = useSelector(isLoggedInSelector);
   const insets = useSafeAreaInsets();
   const [agency, setAgency] = useState<IAgency | null>(null);
   const [visibleCreateRequestModal, setVisibleCreateRequestModal] =
@@ -126,7 +126,13 @@ const Agnecy = (props: AgencyProps) => {
                     }}
                     mode="contained"
                     uppercase={false}
-                    onPress={() => setVisibleCreateRequestModal(true)}
+                    onPress={() => {
+                      if (!isLoggedIn) {
+                        props.navigation.navigate("AuthScreen");
+                      } else {
+                        setVisibleCreateRequestModal(true);
+                      }
+                    }}
                     icon={({ size, color }) => (
                       <Ionicons
                         name="hammer-outline"
@@ -175,6 +181,7 @@ const Agnecy = (props: AgencyProps) => {
               </Text>
               <View>
                 {agency &&
+                  agency.branches &&
                   agency.branches.map((branch) => (
                     <Branch branch={branch} key={branch.id} />
                   ))}

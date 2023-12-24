@@ -16,21 +16,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { getCategories } from "../redux/reducers/category";
 import { AppDispatch } from "../redux/store";
-import { categoriesSelector } from "../redux/selectors";
+import { categoriesSelector, isLoggedInSelector } from "../redux/selectors";
 import TopService from "../components/TopService/TopService";
 import { Button, Provider } from "react-native-paper";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import CreateRequestModal from "../components/Modals/CreateRequestModal";
 import CreateRequest from "../components/CreateRequest";
+import { useNavigation } from "@react-navigation/native";
+import { type StackNavigation } from "../navigators/StackNavigator";
 
 const { width, height } = Dimensions.get("window");
 
 const Home = () => {
+  const navigation = useNavigation<StackNavigation>();
   const insets = useSafeAreaInsets();
   const categories = useSelector(categoriesSelector);
   const dispatch = useDispatch<AppDispatch>();
   const [visibleCreateRequestModal, setVisibleCreateRequestModal] =
     useState(false);
+  const isLoggedIn = useSelector(isLoggedInSelector);
 
   const topService = useMemo(() => {
     return categories.slice(0, 4);
@@ -88,7 +92,13 @@ const Home = () => {
                 }}
                 mode="contained"
                 uppercase={false}
-                onPress={() => setVisibleCreateRequestModal(true)}
+                onPress={() => {
+                  if (!isLoggedIn) {
+                    navigation.navigate("AuthScreen");
+                  } else {
+                    setVisibleCreateRequestModal(true);
+                  }
+                }}
                 icon={({ size, color }) => (
                   <Ionicons name="hammer-outline" size={size} color={color} />
                 )}
