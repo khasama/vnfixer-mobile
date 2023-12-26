@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "../components/Header/Header";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,6 +25,8 @@ import { getMyRequests, logout } from "../redux/reducers/auth";
 import { AppDispatch } from "../redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Request from "../components/Request/Request";
+import { Portal, Provider } from "react-native-paper";
+import RequestInformationModal from "../components/Modals/RequestInfomationModal";
 
 const { width, height } = Dimensions.get("window");
 const MyRequests = () => {
@@ -33,65 +35,76 @@ const MyRequests = () => {
   const insets = useSafeAreaInsets();
   const currentUser = useSelector(currentUserSelector);
   const requests = useSelector(myRequestsSelector);
+  const [requestSelected, setRequestSelected] = useState<IRequest | null>(null);
+  const [visibleRequestInformationModal, setVisibleRequestInformationModal] =
+    useState(false);
 
   const handleViewRequest = (request: IRequest) => {
-    console.log(request.title);
+    setRequestSelected(request);
+    setVisibleRequestInformationModal(true);
   };
 
   useEffect(() => {
-    if (!requests) {
-      dispatch(getMyRequests())
-        .then(unwrapResult)
-        .catch((err: string) => {
-          ToastAndroid.show(err, ToastAndroid.SHORT);
-        });
-    }
-  }, [requests]);
+    dispatch(getMyRequests())
+      .then(unwrapResult)
+      .catch((err: string) => {
+        ToastAndroid.show(err, ToastAndroid.SHORT);
+      });
+  }, []);
 
   return (
-    <View style={{ flex: 1, paddingTop: insets.top }}>
-      <Header allowBack={true} />
-      <ScrollView
-        contentContainerStyle={{
-          alignItems: "center",
-          paddingBottom: 20,
-        }}
-        showsVerticalScrollIndicator={false}
-      >
-        <View
-          style={{
-            marginTop: 10,
+    <Provider>
+      <Portal>
+        <RequestInformationModal
+          request={requestSelected}
+          setVisible={setVisibleRequestInformationModal}
+          visible={visibleRequestInformationModal}
+        />
+      </Portal>
+      <View style={{ flex: 1, paddingTop: insets.top }}>
+        <Header allowBack={true} />
+        <ScrollView
+          contentContainerStyle={{
+            alignItems: "center",
+            paddingBottom: 20,
           }}
+          showsVerticalScrollIndicator={false}
         >
-          <Text
+          <View
             style={{
-              fontWeight: "500",
-              fontSize: 18,
-              marginLeft: 10,
-              color: "#3d3d3d",
+              marginTop: 10,
             }}
           >
-            Yêu cầu của bạn
-          </Text>
-        </View>
-        <View
-          style={{
-            width,
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          {requests &&
-            requests.map((request) => (
-              <Request
-                request={request}
-                key={request.id}
-                handleClick={handleViewRequest}
-              />
-            ))}
-        </View>
-      </ScrollView>
-    </View>
+            <Text
+              style={{
+                fontWeight: "500",
+                fontSize: 18,
+                marginLeft: 10,
+                color: "#3d3d3d",
+              }}
+            >
+              Yêu cầu của bạn
+            </Text>
+          </View>
+          <View
+            style={{
+              width,
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {requests &&
+              requests.map((request) => (
+                <Request
+                  request={request}
+                  key={request.id}
+                  handleClick={handleViewRequest}
+                />
+              ))}
+          </View>
+        </ScrollView>
+      </View>
+    </Provider>
   );
 };
 

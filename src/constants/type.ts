@@ -66,6 +66,7 @@ export const cities = [
 
 export enum RequestStatus {
   PENDING = "PENDING",
+  PICKED = "PICKED",
   ACCEPT = "ACCEPT",
   DONE = "DONE",
   CANCEL = "CANCEL",
@@ -109,7 +110,7 @@ export interface IRequest {
   description: string;
   city: string;
   location: string;
-  expectDate: string[];
+  expectDate: string[] | string;
   categoryId: number;
   status?: RequestStatus;
   branchId?: number | null;
@@ -119,6 +120,7 @@ export interface IRequest {
   userId?: number;
   category?: ICategory;
   branch?: IBranch;
+  staffId?: number;
 }
 
 export interface IBranch {
