@@ -8,6 +8,11 @@ const store = configureStore({
     auth: authSlice.reducer,
     request: requestSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      immutableCheck: false,
+      serializableCheck: false,
+    }),
 });
 
 export type AppDispatch = typeof store.dispatch;

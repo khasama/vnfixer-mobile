@@ -76,13 +76,11 @@ export const takeRequest = createAsyncThunk(
   async ({ requestId }: { requestId: number }, { rejectWithValue }) => {
     try {
       const res = await instance.put(`/requests/take/${requestId}`);
-      console.log({ res });
       if (res.status === 200) {
         return {
           request: res.data.data,
         };
       } else {
-        console.log(res.data);
         throw rejectWithValue(res.data.message);
       }
     } catch (error: any) {

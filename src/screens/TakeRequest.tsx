@@ -18,17 +18,20 @@ import {
 } from "../redux/selectors";
 import { useNavigation } from "@react-navigation/native";
 import { type StackNavigation } from "../navigators/StackNavigator";
-import { IRequest } from "../constants/type";
+import { IRequest, RequestStatus } from "../constants/type";
 import { AppDispatch } from "../redux/store";
 import { unwrapResult } from "@reduxjs/toolkit";
 import Request from "../components/Request/Request";
 import { Portal, Provider } from "react-native-paper";
 import RequestInformationModal from "../components/Modals/RequestInfomationModal";
-import {
-  getRequestTaked,
-  getRequestsCanTake,
-  takeRequest,
-} from "../redux/reducers/request";
+import // getRequestTaked,
+// getRequestsCanTake,
+// takeRequest,
+"../redux/reducers/request";
+import getRequestsCanTake from "../api/getRequestsCanTake";
+import getRequestTaked from "../api/getRequestTaked";
+import takeRequest from "../api/takeRequest";
+import changeRequestStatus from "../api/changeRequestStatus";
 
 const { width, height } = Dimensions.get("window");
 const TakeRequest = () => {
@@ -36,9 +39,9 @@ const TakeRequest = () => {
   const navigation = useNavigation<StackNavigation>();
   const insets = useSafeAreaInsets();
   const currentUser = useSelector(currentUserSelector);
-  const requests = useSelector(requestsCanTakeSelector);
-  const requestTaked = useSelector(requestTakedSelector);
   const [requestSelected, setRequestSelected] = useState<IRequest | null>(null);
+  const [requestTaked, setrequestTaked] = useState<IRequest | null>(null);
+  const [requests, setRequests] = useState<IRequest[]>([]);
   const [visibleRequestInformationModal, setVisibleRequestInformationModal] =
     useState(false);
   const [modalState, setModalState] = useState<"untaked" | "taked">("untaked");
@@ -59,38 +62,62 @@ const TakeRequest = () => {
     return modalState;
   }, [modalState]);
 
-  const handleTakeRequest = (requestId: number | undefined) => {
+  const requestsCanTake = useMemo(() => {
+    return requests;
+  }, [requests]);
+
+  const requestTakedCast = useMemo(() => {
+    return requestTaked;
+  }, [requestTaked]);
+
+  const handleTakeRequest = async (requestId: number | undefined) => {
     if (!requestId) {
-      ToastAndroid.show("Không tìm thấy yêu cầu", ToastAndroid.SHORT);
+      ToastAndroid.show("Request not found", ToastAndroid.SHORT);
       return;
     }
-    dispatch(takeRequest({ requestId }))
-      .then(unwrapResult)
-      .catch((err: any) => {
-        ToastAndroid.show(err?.message, ToastAndroid.SHORT);
-      });
+    try {
+      await takeRequest(requestId);
+      await callApiGetRequestsCanTake();
+      await callApiGetRequestTaked();
+      ToastAndroid.show("Take request success", ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show("Take request failed", ToastAndroid.SHORT);
+    }
+    setVisibleRequestInformationModal(false);
   };
 
-  const handleDoneRequest = (requestId: number | undefined) => {
-    console.log({ requestId });
-    // setRequestSelected(request);
-    // setVisibleRequestInformationModal(true);
+  const handleDoneRequest = async (requestId: number | undefined) => {
+    if (!requestId) {
+      ToastAndroid.show("Request not found", ToastAndroid.SHORT);
+      return;
+    }
+    try {
+      await changeRequestStatus(requestId, RequestStatus.DONE);
+      await callApiGetRequestsCanTake();
+      await callApiGetRequestTaked();
+      ToastAndroid.show("Done", ToastAndroid.SHORT);
+    } catch (error) {
+      ToastAndroid.show("Failed", ToastAndroid.SHORT);
+    }
+    setVisibleRequestInformationModal(false);
   };
 
-  const callApiGetRequestsCanTake = () => {
-    dispatch(getRequestsCanTake())
-      .then(unwrapResult)
-      .catch((err: string) => {
-        ToastAndroid.show(err, ToastAndroid.SHORT);
-      });
+  const callApiGetRequestsCanTake = async () => {
+    try {
+      const res = await getRequestsCanTake();
+      setRequests(res.data);
+    } catch (error) {
+      ToastAndroid.show("Get requests can take failed", ToastAndroid.SHORT);
+    }
   };
 
-  const callApiGetRequestTaked = () => {
-    dispatch(getRequestTaked())
-      .then(unwrapResult)
-      .catch((err: string) => {
-        ToastAndroid.show(err, ToastAndroid.SHORT);
-      });
+  const callApiGetRequestTaked = async () => {
+    try {
+      const res = await getRequestTaked();
+      setrequestTaked(res.data);
+    } catch (error) {
+      ToastAndroid.show("Get request taked failed", ToastAndroid.SHORT);
+    }
   };
 
   const onRefresh = useCallback(() => {
@@ -103,7 +130,7 @@ const TakeRequest = () => {
   useEffect(() => {
     callApiGetRequestsCanTake();
     callApiGetRequestTaked();
-  }, [requests, requestTaked]);
+  }, []);
 
   return (
     <Provider>
@@ -154,10 +181,10 @@ const TakeRequest = () => {
                 alignItems: "center",
               }}
             >
-              {requestTaked ? (
+              {requestTakedCast ? (
                 <Request
-                  request={requestTaked}
-                  key={requestTaked.id}
+                  request={requestTakedCast}
+                  key={requestTakedCast.id}
                   handleClick={handleViewRequestTaked}
                 />
               ) : (
@@ -190,8 +217,8 @@ const TakeRequest = () => {
                 alignItems: "center",
               }}
             >
-              {requests &&
-                requests.map((request) => (
+              {requestsCanTake &&
+                requestsCanTake.map((request) => (
                   <Request
                     request={request}
                     key={request.id}

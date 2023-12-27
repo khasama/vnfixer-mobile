@@ -24,6 +24,9 @@ const authSlice = createSlice({
       .addCase(getMyRequests.fulfilled, (state, action) => {
         state.myRequests = action.payload.requests;
       })
+      .addCase(updateInfo.fulfilled, (state, action) => {
+        state.currentUser = action.payload.user;
+      })
       .addCase(logout.fulfilled, (state) => {
         state.isLoggedIn = false;
         state.currentUser = null;
@@ -87,6 +90,28 @@ export const logout = createAsyncThunk(
       const res = await instance.post(`/auth/logout`);
       if (res.status == 200) {
         await SecureStore.deleteItemAsync("access_token");
+      }
+    } catch (error: any) {
+      if (error.payload) {
+        throw rejectWithValue(error.payload);
+      } else {
+        throw error;
+      }
+    }
+  }
+);
+
+export const updateInfo = createAsyncThunk(
+  "updateInfo",
+  async (user: IUser, { rejectWithValue }) => {
+    try {
+      const res = await instance.put(`/users/information`, user);
+      if (res.status == 200) {
+        return {
+          user: res.data,
+        };
+      } else {
+        throw rejectWithValue(res.data.message);
       }
     } catch (error: any) {
       if (error.payload) {

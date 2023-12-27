@@ -6,7 +6,7 @@ import {
   HomeStackNavigator,
   ProfileStackNavigator,
   ServiceStackNavigator,
-  AgenciesStackNavigator,
+  NotificationStackNavigator,
 } from "./StackNavigator";
 import { View, Text } from "react-native";
 
@@ -41,8 +41,8 @@ const TabNavigator = () => {
           } else if (route.name === "Service") {
             iconName = focused ? "construct" : "construct-outline";
             size = focused ? size + 5 : size;
-          } else if (route.name === "Agencies") {
-            iconName = focused ? "people" : "people-outline";
+          } else if (route.name === "Notification") {
+            iconName = focused ? "notifications" : "notifications-outline";
             size = focused ? size + 5 : size;
           }
 
@@ -61,7 +61,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="Home" component={HomeStackNavigator} />
       <Tab.Screen name="Service" component={ServiceStackNavigator} />
-      <Tab.Screen name="Agencies" component={AgenciesStackNavigator} />
+      <Tab.Screen name="Notification" component={NotificationStackNavigator} />
       <Tab.Screen name="Profile" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );

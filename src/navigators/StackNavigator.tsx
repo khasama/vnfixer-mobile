@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "../screens/Home";
-import Agencies from "../screens/Agencies";
+import Notification from "../screens/Notification";
 import Service from "../screens/Service";
 import Agency from "../screens/Agency";
 import Profile from "../screens/Profile";
@@ -15,7 +15,7 @@ import { NavigationProp } from "@react-navigation/native";
 export type ScreenNames = [
   "HomeScreen",
   "ProfileScreen",
-  "AgenciesScreen",
+  "NotificationScreen",
   "ServiceScreen",
   "AgencyScreen",
   "AuthScreen"
@@ -24,7 +24,7 @@ export type RootStackParamList = {
   HomeScreen: undefined;
   AuthScreen: undefined;
   ProfileScreen: undefined;
-  AgenciesScreen: undefined;
+  NotificationScreen: undefined;
   ServiceScreen: undefined;
   AgencyScreen: { id: string };
   TakeRequestScreen: undefined;
@@ -64,13 +64,13 @@ const ProfileStackNavigator = () => {
   );
 };
 
-const AgenciesStackNavigator = () => {
+const NotificationStackNavigator = () => {
   return (
     <Stack.Navigator
       screenOptions={screenOptionStyle}
-      initialRouteName="AgenciesScreen"
+      initialRouteName="NotificationScreen"
     >
-      <Stack.Screen name="AgenciesScreen" component={Agencies} />
+      <Stack.Screen name="NotificationScreen" component={Notification} />
     </Stack.Navigator>
   );
 };
@@ -91,5 +91,5 @@ export {
   HomeStackNavigator,
   ProfileStackNavigator,
   ServiceStackNavigator,
-  AgenciesStackNavigator,
+  NotificationStackNavigator,
 };
