@@ -31,6 +31,7 @@ instance.interceptors.response.use(
     if (statusCode === 401) {
       // notifier.error('Please login to access this resource')
     } else {
+      console.log({ error: error.response.data });
       throw error;
     }
   }

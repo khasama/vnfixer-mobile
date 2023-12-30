@@ -94,6 +94,7 @@ export interface IUser {
   role: RoleType;
   branchId: number | null;
   agencyRole: AgencyRoleType | null;
+  mobileNotiToken: string | null;
 }
 
 export interface ICategory {

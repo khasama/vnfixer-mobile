@@ -6,6 +6,11 @@ import { ExpoConfig } from "expo/config";
 const config: ExpoConfig = {
   name: "vnfixer",
   slug: "vnfixer",
+  extra: {
+    eas: {
+      projectId: "2c9a52ff-db07-4e62-b414-c346f51980c8",
+    },
+  },
 };
 
 export default config;

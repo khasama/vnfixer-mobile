@@ -35,8 +35,8 @@ const LoginForm = () => {
           ToastAndroid.show("Đăng nhập thành công", ToastAndroid.SHORT);
           navigation.goBack();
         })
-        .catch((err: string) => {
-          ToastAndroid.show(err, ToastAndroid.SHORT);
+        .catch((err: any) => {
+          ToastAndroid.show(err?.message, ToastAndroid.SHORT);
         });
     },
     []

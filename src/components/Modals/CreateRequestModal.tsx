@@ -5,13 +5,12 @@ import {
   ToastAndroid,
   View,
 } from "react-native";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Button, Modal, TextInput } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
 import { IAgency, IRequest, cities } from "../../constants/type";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Formik } from "formik";
-import getCategories from "../../api/getCategories";
 import { categoriesSelector, currentUserSelector } from "../../redux/selectors";
 import { useSelector } from "react-redux";
 import createRequest from "../../api/createRequest";
@@ -34,6 +33,9 @@ const CreateRequestModal = ({
   const categories = useSelector(categoriesSelector);
   const currentUser = useSelector(currentUserSelector);
   const citiesOfBraches = useMemo(() => {
+    if (!agency) {
+      return null;
+    }
     if (!agency?.branches) {
       return [];
     }

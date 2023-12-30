@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import * as SecureStore from "expo-secure-store";
 import instance from "../../configs/axios.config";
 import { IRequest, IUser } from "../../constants/type";
+import { registerForPushNotificationsAsync } from "../../utils/registerPushNotiToken";
+import updateNotiToken from "../../api/updateNotiToken";
 type State = {
   isLoggedIn: boolean;
   currentUser: IUser | null;
@@ -45,9 +47,12 @@ export const login = createAsyncThunk(
       const res = await instance.post(`/auth/login`, { email, password });
       if (res.status === 200) {
         await SecureStore.setItemAsync("access_token", res.data.accessToken);
-        return {
-          user: res.data.user,
-        };
+        const user = res.data.user as IUser;
+        const token = await registerForPushNotificationsAsync();
+        if (token && token !== user.mobileNotiToken) {
+          await updateNotiToken(token);
+        }
+        return { user };
       } else {
         throw rejectWithValue(res.data.message);
       }
