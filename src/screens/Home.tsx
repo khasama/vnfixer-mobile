@@ -83,12 +83,15 @@ const Home = () => {
               style={{
                 width: width,
                 height: width / 2,
+                display: "flex",
+                justifyContent: "flex-end",
               }}
             >
               <Button
                 buttonColor="#4894ef"
                 style={{
                   alignSelf: "center",
+                  marginBottom: 25,
                 }}
                 mode="contained"
                 uppercase={false}

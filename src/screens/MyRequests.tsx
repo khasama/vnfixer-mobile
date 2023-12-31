@@ -59,6 +59,7 @@ const MyRequests = () => {
           request={requestSelected}
           setVisible={setVisibleRequestInformationModal}
           visible={visibleRequestInformationModal}
+          state={"taked"}
         />
       </Portal>
       <View style={{ flex: 1, paddingTop: insets.top }}>

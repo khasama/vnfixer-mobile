@@ -83,6 +83,21 @@ export enum AgencyRoleType {
   MANAGER = "MANAGER",
 }
 
+export interface INotification {
+  id: number;
+  content: INotificationContent;
+  read: boolean;
+  ownerId: number;
+  owner: IUser;
+  createdAt: string;
+}
+
+export interface INotificationContent {
+  title: string;
+  body: string;
+  data: Record<any, any>;
+}
+
 export interface IUser {
   id?: number;
   email: string;
