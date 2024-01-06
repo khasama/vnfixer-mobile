@@ -82,6 +82,8 @@ const CreateRequestModal = ({
           }
           try {
             await createRequest(request);
+            ToastAndroid.show("Tạo yêu cầu thành công", ToastAndroid.SHORT);
+            setVisibleCreateRequestModal(false);
             //reset form
           } catch (error) {
             ToastAndroid.show("err", ToastAndroid.SHORT);

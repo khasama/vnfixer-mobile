@@ -11,23 +11,14 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "../components/Header/Header";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  currentUserSelector,
-  requestTakedSelector,
-  requestsCanTakeSelector,
-} from "../redux/selectors";
+import { currentUserSelector } from "../redux/selectors";
 import { useNavigation } from "@react-navigation/native";
 import { type StackNavigation } from "../navigators/StackNavigator";
 import { IRequest, RequestStatus } from "../constants/type";
 import { AppDispatch } from "../redux/store";
-import { unwrapResult } from "@reduxjs/toolkit";
 import Request from "../components/Request/Request";
 import { Portal, Provider } from "react-native-paper";
 import RequestInformationModal from "../components/Modals/RequestInfomationModal";
-import // getRequestTaked,
-// getRequestsCanTake,
-// takeRequest,
-"../redux/reducers/request";
 import getRequestsCanTake from "../api/getRequestsCanTake";
 import getRequestTaked from "../api/getRequestTaked";
 import takeRequest from "../api/takeRequest";

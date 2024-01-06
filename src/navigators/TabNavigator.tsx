@@ -19,6 +19,7 @@ const getRouteName = (route: any) => {
     routeName?.includes("TakeRequestScreen") ||
     routeName?.includes("InformationScreen") ||
     routeName?.includes("MyRequestsScreen") ||
+    routeName?.includes("ManagerScreen") ||
     routeName?.includes("AgencyScreen")
   ) {
     return "none";

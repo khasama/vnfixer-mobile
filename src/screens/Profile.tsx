@@ -165,12 +165,15 @@ const Profile = () => {
 
           {currentUser.branchId &&
             currentUser.agencyRole === AgencyRoleType.MANAGER && (
-              <TouchableOpacity style={styles.menu}>
+              <TouchableOpacity
+                style={styles.menu}
+                onPress={() => navigation.navigate("ManagerScreen")}
+              >
                 <View>
                   <Ionicons name="construct" size={30} color="#3d3d3d" />
                 </View>
                 <View>
-                  <Text style={styles.menuTitle}>Đại lý</Text>
+                  <Text style={styles.menuTitle}>Quản lý chi nhánh</Text>
                 </View>
               </TouchableOpacity>
             )}

@@ -110,6 +110,7 @@ export interface IUser {
   branchId: number | null;
   agencyRole: AgencyRoleType | null;
   mobileNotiToken: string | null;
+  branch?: IBranch;
 }
 
 export interface ICategory {
@@ -154,6 +155,7 @@ export interface IAgency {
   description: string;
   logo: string;
   category: ICategory;
+  categoryId: number;
   ratings: IRating[];
   branches?: IBranch[];
 }
@@ -163,4 +165,13 @@ export interface IRating {
   userId: number;
   agencyId: number;
   rating: number;
+}
+
+export interface IComment {
+  id?: number;
+  agencyId: number;
+  userId: number;
+  comment: string;
+  owner: IUser;
+  createdAt: string;
 }

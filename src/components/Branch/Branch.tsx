@@ -53,7 +53,7 @@ const Branch = ({ branch }: BranchProps) => {
         >
           {branch.city}
         </Text>
-        <Text>{branch.address}</Text>
+        <Text numberOfLines={1}>{branch.address}</Text>
       </View>
       <View
         style={{

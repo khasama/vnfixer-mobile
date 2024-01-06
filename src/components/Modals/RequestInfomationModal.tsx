@@ -8,17 +8,19 @@ type RequestInformationModalProps = {
   request: IRequest | null;
   visible: boolean;
   setVisible: (show: boolean) => void;
-  handleCanelClick?: (requestId: number | undefined) => void;
+  handlPickClick?: (requestId: number | undefined) => void;
+  handleCancelClick?: (requestId: number | undefined) => void;
   handleTakeClick?: (requestId: number | undefined) => void;
   handleDoneClick?: (requestId: number | undefined) => void;
-  state: "taked" | "untaked";
+  state: "taked" | "untaked" | "pick";
 };
 
 const RequestInformationModal = ({
   request,
   visible,
   setVisible,
-  handleCanelClick,
+  handlPickClick,
+  handleCancelClick,
   handleTakeClick,
   handleDoneClick,
   state,
@@ -143,7 +145,7 @@ const RequestInformationModal = ({
         />
 
         <View style={{ alignItems: "center", marginTop: 10 }}>
-          {handleCanelClick && (
+          {handleCancelClick && (
             <Button
               icon={({ size, color }) => (
                 <Ionicons name="build-outline" size={size} color="#fff" />
@@ -153,7 +155,7 @@ const RequestInformationModal = ({
               style={{
                 backgroundColor: "red",
               }}
-              onPress={() => handleCanelClick(request?.id)}
+              onPress={() => handleCancelClick(request?.id)}
             >
               Hủy yêu cầu
             </Button>
@@ -186,6 +188,21 @@ const RequestInformationModal = ({
               onPress={() => handleDoneClick(request?.id)}
             >
               Hoàn thành
+            </Button>
+          )}
+          {handlPickClick && state === "pick" && (
+            <Button
+              icon={({ size, color }) => (
+                <Ionicons name="build-outline" size={size} color="#fff" />
+              )}
+              mode="contained"
+              uppercase={false}
+              style={{
+                backgroundColor: "green",
+              }}
+              onPress={() => handlPickClick(request?.id)}
+            >
+              Lấy
             </Button>
           )}
         </View>

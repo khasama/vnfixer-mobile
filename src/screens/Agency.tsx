@@ -9,7 +9,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Header from "../components/Header/Header";
-import { IAgency } from "../constants/type";
+import { IAgency, IComment } from "../constants/type";
 import { type StackNavigation } from "../navigators/StackNavigator";
 import getAgency from "../api/getAgencyInfo";
 import { Button, Provider } from "react-native-paper";
@@ -19,6 +19,9 @@ import CreateRequest from "../components/CreateRequest";
 import { useNavigation } from "@react-navigation/native";
 import { isLoggedInSelector } from "../redux/selectors";
 import { useSelector } from "react-redux";
+import getComments from "../api/getCommentsOfAgency";
+import CommentForm from "../components/Comment/CommentForm";
+import CommentCard from "../components/Comment/CommentCard";
 
 type AgencyProps = {
   navigation: StackNavigation;
@@ -30,6 +33,7 @@ const Agnecy = (props: AgencyProps) => {
   const isLoggedIn = useSelector(isLoggedInSelector);
   const insets = useSafeAreaInsets();
   const [agency, setAgency] = useState<IAgency | null>(null);
+  const [comments, setComments] = useState<IComment[] | null>(null);
   const [visibleCreateRequestModal, setVisibleCreateRequestModal] =
     useState(false);
 
@@ -37,6 +41,14 @@ const Agnecy = (props: AgencyProps) => {
     async (id: string) => {
       const agency = await getAgency(id);
       setAgency(agency.data);
+    },
+    [id]
+  );
+
+  const callApiGetComments = useCallback(
+    async (id: number) => {
+      const res = await getComments(id);
+      setComments(res.data);
     },
     [id]
   );
@@ -63,6 +75,7 @@ const Agnecy = (props: AgencyProps) => {
 
   useEffect(() => {
     callApiGetAgency(id);
+    callApiGetComments(id);
   }, [agency]);
   return (
     <Provider>
@@ -175,7 +188,11 @@ const Agnecy = (props: AgencyProps) => {
 
             <View>
               <Text
-                style={{ color: "#616162", fontSize: 20, fontWeight: "600" }}
+                style={{
+                  color: "#616162",
+                  fontSize: 20,
+                  fontWeight: "600",
+                }}
               >
                 Chi nhánh
               </Text>
@@ -188,13 +205,31 @@ const Agnecy = (props: AgencyProps) => {
               </View>
             </View>
 
-            <View>
-              <Text
-                style={{ color: "#616162", fontSize: 20, fontWeight: "600" }}
-              >
-                Đánh giá
-              </Text>
-            </View>
+            {agency && (
+              <View>
+                <Text
+                  style={{
+                    color: "#616162",
+                    fontSize: 20,
+                    fontWeight: "600",
+                    marginBottom: 10,
+                  }}
+                >
+                  Đánh giá
+                </Text>
+                <View>
+                  <View>
+                    <CommentForm agencyId={agency?.id} />
+                  </View>
+                  <View>
+                    {comments &&
+                      comments.map((cmt) => (
+                        <CommentCard comment={cmt} key={cmt.id} />
+                      ))}
+                  </View>
+                </View>
+              </View>
+            )}
           </View>
         </ScrollView>
       </View>
