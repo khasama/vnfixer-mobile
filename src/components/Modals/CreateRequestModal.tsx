@@ -5,10 +5,10 @@ import {
   ToastAndroid,
   View,
 } from "react-native";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Button, Modal, TextInput } from "react-native-paper";
 import SelectDropdown from "react-native-select-dropdown";
-import { IAgency, IRequest, cities } from "../../constants/type";
+import { IAgency, IRequest, cityDistrict } from "../../constants/type";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Formik } from "formik";
 import { categoriesSelector, currentUserSelector } from "../../redux/selectors";
@@ -32,14 +32,20 @@ const CreateRequestModal = ({
 }: CreateRequestModalProps) => {
   const categories = useSelector(categoriesSelector);
   const currentUser = useSelector(currentUserSelector);
-  const citiesOfBraches = useMemo(() => {
+  const [districts, setdistricts] = useState<string[]>([]);
+  const districtsToSelect = useMemo(() => {
+    return districts;
+  }, [districts]);
+  const citiesOfBranches = useMemo(() => {
     if (!agency) {
       return null;
     }
     if (!agency?.branches) {
       return [];
     }
-    return agency?.branches.map((branch) => branch.city);
+    return agency?.branches.map((branch) => {
+      return cityDistrict.find(({ city }) => branch.city === city);
+    });
   }, [agency]);
 
   const getBranchWithCity = useCallback(
@@ -103,7 +109,7 @@ const CreateRequestModal = ({
             >
               Tạo yêu cầu {agency && `cho ${agency?.name}`}
             </Text>
-            <TextInput
+            {/* <TextInput
               style={{
                 width: "100%",
                 marginVertical: 5,
@@ -112,7 +118,7 @@ const CreateRequestModal = ({
               label={<Text style={{}}>Tiêu đề</Text>}
               onChangeText={handleChange("title")}
               value={values.title}
-            />
+            /> */}
             <TextInput
               style={{
                 width: "100%",
@@ -123,47 +129,6 @@ const CreateRequestModal = ({
               onChangeText={handleChange("description")}
               value={values.description}
               multiline={true}
-            />
-
-            <SelectDropdown
-              data={citiesOfBraches || cities}
-              defaultButtonText={"Thành phố"}
-              rowTextStyle={{
-                color: "#000",
-                textAlign: "left",
-              }}
-              buttonTextStyle={{
-                color: "#000",
-                textAlign: "left",
-              }}
-              dropdownIconPosition={"right"}
-              selectedRowStyle={{ backgroundColor: "#fff" }}
-              buttonStyle={{
-                backgroundColor: "#fff",
-                borderWidth: 1,
-                borderColor: "#000",
-                borderRadius: 4,
-                width: "100%",
-                marginVertical: 5,
-              }}
-              onSelect={(selectedItem, index) => {
-                setFieldValue("city", selectedItem);
-              }}
-              buttonTextAfterSelection={(selectedItem, index) => {
-                return selectedItem;
-              }}
-              rowTextForSelection={(item, index) => {
-                return item;
-              }}
-              renderDropdownIcon={() => {
-                return (
-                  <Ionicons
-                    name="chevron-down-outline"
-                    size={25}
-                    color={"#000"}
-                  />
-                );
-              }}
             />
 
             {!agency && (
@@ -208,6 +173,97 @@ const CreateRequestModal = ({
                 }}
               />
             )}
+
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                marginVertical: 5,
+              }}
+            >
+              <SelectDropdown
+                data={citiesOfBranches || cityDistrict}
+                defaultButtonText={"Thành phố"}
+                rowTextStyle={{
+                  color: "#000",
+                  textAlign: "left",
+                }}
+                buttonTextStyle={{
+                  color: "#000",
+                  textAlign: "left",
+                }}
+                dropdownIconPosition={"right"}
+                selectedRowStyle={{ backgroundColor: "#fff" }}
+                buttonStyle={{
+                  backgroundColor: "#fff",
+                  borderWidth: 1,
+                  borderColor: "#000",
+                  borderRadius: 4,
+                  marginLeft: 5,
+                  flex: 1,
+                }}
+                onSelect={(selectedItem, index) => {
+                  setdistricts(selectedItem.districts);
+                  setFieldValue("city", selectedItem.city);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  return selectedItem.city;
+                }}
+                rowTextForSelection={(item, index) => {
+                  return item.city;
+                }}
+                renderDropdownIcon={() => {
+                  return (
+                    <Ionicons
+                      name="chevron-down-outline"
+                      size={25}
+                      color={"#000"}
+                    />
+                  );
+                }}
+              />
+
+              <SelectDropdown
+                data={districtsToSelect}
+                defaultButtonText={"Quận huyện"}
+                rowTextStyle={{
+                  color: "#000",
+                  textAlign: "left",
+                }}
+                buttonTextStyle={{
+                  color: "#000",
+                  textAlign: "left",
+                }}
+                dropdownIconPosition={"right"}
+                selectedRowStyle={{ backgroundColor: "#fff" }}
+                buttonStyle={{
+                  backgroundColor: "#fff",
+                  borderWidth: 1,
+                  borderColor: "#000",
+                  borderRadius: 4,
+                  marginRight: 5,
+                  flex: 1,
+                }}
+                onSelect={(selectedItem, index) => {
+                  // setFieldValue("city", selectedItem);
+                }}
+                buttonTextAfterSelection={(selectedItem, index) => {
+                  return selectedItem;
+                }}
+                rowTextForSelection={(item, index) => {
+                  return item;
+                }}
+                renderDropdownIcon={() => {
+                  return (
+                    <Ionicons
+                      name="chevron-down-outline"
+                      size={25}
+                      color={"#000"}
+                    />
+                  );
+                }}
+              />
+            </View>
 
             <TextInput
               style={{

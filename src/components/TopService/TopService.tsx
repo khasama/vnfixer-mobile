@@ -12,11 +12,11 @@ const { width, height } = Dimensions.get("window");
 
 const TopService = ({ category }: { category: ICategory }) => {
   return (
-    <View>
+    <View style={{ width: "100%" }}>
       <TouchableOpacity
         style={{
-          width: width / 2.5,
-          margin: 5,
+          width: "100%",
+          marginVertical: 5,
           backgroundColor: "#fff",
           padding: 10,
           borderRadius: 10,

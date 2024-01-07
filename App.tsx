@@ -1,12 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useRoute } from "@react-navigation/native";
 import TabNavigator from "./src/navigators/TabNavigator";
 import { Provider } from "react-redux";
 import store from "./src/redux/store";
 import { useEffect, useRef } from "react";
 import * as Notifications from "expo-notifications";
+import Chatbot from "./src/components/Chatbot/Chatbot";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -15,7 +16,6 @@ Notifications.setNotificationHandler({
     shouldSetBadge: true,
   }),
 });
-
 export default function App() {
   const responseListener = useRef<any>();
 
@@ -31,10 +31,11 @@ export default function App() {
   }, []);
   return (
     <Provider store={store}>
-      <SafeAreaProvider>
+      <SafeAreaProvider style={{ position: "relative" }}>
         <NavigationContainer>
           <TabNavigator />
           <StatusBar style="auto" />
+          <Chatbot />
         </NavigationContainer>
       </SafeAreaProvider>
     </Provider>

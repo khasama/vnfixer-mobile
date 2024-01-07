@@ -21,7 +21,7 @@ const Card = (props: CardProps) => {
   const navigation = useNavigation<StackNavigation>();
   const countRequest = useMemo(() => {
     let count = 0;
-    props.agency.branches.map((branch) => {
+    props.agency.branches?.map((branch) => {
       count += branch.requests?.length;
     });
     return count;

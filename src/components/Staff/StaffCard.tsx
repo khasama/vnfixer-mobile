@@ -28,6 +28,7 @@ const StaffCard = ({ staff, handleClick }: Props) => {
           width: "90%",
           marginVertical: 10,
           borderRadius: 10,
+          flex: 1,
         }}
         onPress={() => handleClick(staff)}
       >
@@ -51,12 +52,15 @@ const StaffCard = ({ staff, handleClick }: Props) => {
         <View
           style={{
             padding: 10,
+            flex: 1,
           }}
         >
-          <Text>
+          <Text numberOfLines={1} style={{ width: "100%" }}>
             Email: {staff.email} {currentUser.id === staff.id && "(Bạn)"}
           </Text>
-          <Text>Họ tên: {staff.fullName}</Text>
+          <Text numberOfLines={1} style={{ width: "100%" }}>
+            Họ tên: {staff.fullName}
+          </Text>
           <Text>Vai trò: {staff.agencyRole}</Text>
         </View>
       </TouchableOpacity>

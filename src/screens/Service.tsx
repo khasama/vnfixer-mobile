@@ -6,7 +6,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import getAgencies from "../api/getAgencies";
 import Card from "../components/Card/Card";
-import { IAgency, cities } from "../constants/type";
+import { IAgency, cityDistrict } from "../constants/type";
 import { useSelector } from "react-redux";
 import { categoriesSelector } from "../redux/selectors";
 const { width, height } = Dimensions.get("window");
@@ -94,7 +94,7 @@ const Service = () => {
               }}
             />
             <SelectDropdown
-              data={cities}
+              data={cityDistrict}
               defaultButtonText={"Thành phố"}
               rowTextStyle={{
                 color: "#000",
@@ -114,19 +114,20 @@ const Service = () => {
                 width: "47%",
               }}
               onSelect={(selectedItem, index) => {
+                const city = selectedItem.city;
                 setAgencies([]);
-                setSelectedCity(selectedItem);
-                const filter: any = { city: selectedItem };
+                setSelectedCity(city);
+                const filter: any = { city };
                 if (selectedCategory) {
                   filter["categoryId"] = selectedCategory;
                 }
                 callApiGetAgencies(filter);
               }}
               buttonTextAfterSelection={(selectedItem, index) => {
-                return selectedItem;
+                return selectedItem.city;
               }}
               rowTextForSelection={(item, index) => {
-                return item;
+                return item.city;
               }}
               renderDropdownIcon={() => {
                 return (

@@ -31,6 +31,7 @@ const Branch = ({ branch }: BranchProps) => {
         display: "flex",
         flexDirection: "column",
         flexWrap: "wrap",
+        flex: 1,
       }}
     >
       <View
@@ -40,20 +41,24 @@ const Branch = ({ branch }: BranchProps) => {
           flexDirection: "row",
           marginBottom: 3,
           alignItems: "center",
+          flexWrap: "wrap",
         }}
       >
-        <Ionicons name="location" color={"blue"} size={15} />
-        <Text
-          style={{
-            fontWeight: "600",
-            fontSize: 16,
-            marginHorizontal: 5,
-            color: "blue",
-          }}
-        >
-          {branch.city}
+        <Text>
+          <Ionicons name="location" color={"blue"} size={15} />
+          <Text
+            style={{
+              fontWeight: "600",
+              fontSize: 16,
+              marginRight: 10,
+              color: "blue",
+            }}
+          >
+            {branch.city}
+          </Text>
+          &nbsp;
+          <Text style={{ marginRight: 5 }}>{branch.address}</Text>
         </Text>
-        <Text numberOfLines={1}>{branch.address}</Text>
       </View>
       <View
         style={{

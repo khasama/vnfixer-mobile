@@ -27,7 +27,7 @@ export type RootStackParamList = {
   ProfileScreen: undefined;
   NotificationScreen: undefined;
   ServiceScreen: undefined;
-  AgencyScreen: { id: string };
+  AgencyScreen: { id: number };
   TakeRequestScreen: undefined;
   InformationScreen: undefined;
   MyRequestsScreen: undefined;

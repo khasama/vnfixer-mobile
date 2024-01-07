@@ -111,7 +111,7 @@ const Home = () => {
             </View>
           </View>
 
-          <View>
+          <View style={{ width: "95%" }}>
             <View style={{ padding: 10 }}>
               <View>
                 <Text
@@ -126,7 +126,7 @@ const Home = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     flexWrap: "wrap",
-                    flexDirection: "row",
+                    flexDirection: "column",
                     width: "100%",
                     display: "flex",
                   }}
