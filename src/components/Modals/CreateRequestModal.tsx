@@ -71,6 +71,7 @@ const CreateRequestModal = ({
           title: "",
           description: "",
           city: "",
+          district: "",
           location: "",
           categoryId: 0,
           customerPhone: currentUser?.phone || "",
@@ -109,16 +110,6 @@ const CreateRequestModal = ({
             >
               Tạo yêu cầu {agency && `cho ${agency?.name}`}
             </Text>
-            {/* <TextInput
-              style={{
-                width: "100%",
-                marginVertical: 5,
-              }}
-              mode="outlined"
-              label={<Text style={{}}>Tiêu đề</Text>}
-              onChangeText={handleChange("title")}
-              value={values.title}
-            /> */}
             <TextInput
               style={{
                 width: "100%",
@@ -245,7 +236,7 @@ const CreateRequestModal = ({
                   flex: 1,
                 }}
                 onSelect={(selectedItem, index) => {
-                  // setFieldValue("city", selectedItem);
+                  setFieldValue("district", selectedItem);
                 }}
                 buttonTextAfterSelection={(selectedItem, index) => {
                   return selectedItem;
