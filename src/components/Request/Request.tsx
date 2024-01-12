@@ -42,7 +42,7 @@ const Request = ({ request, handleClick }: Props) => {
             padding: 10,
           }}
         >
-          <Text>Tiêu đề: {request.title}</Text>
+          <Text numberOfLines={1}>Mô tả: {request.description}</Text>
           <Text>Dịch vụ: {request.category?.name}</Text>
           <Text>Đại lý: {request.branch?.agency?.name || "Chưa có"}</Text>
         </View>

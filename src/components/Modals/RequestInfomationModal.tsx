@@ -54,8 +54,8 @@ const RequestInformationModal = ({
             marginVertical: 5,
           }}
           mode="outlined"
-          label={<Text style={{}}>Tiêu đề</Text>}
-          value={request?.title}
+          label={<Text style={{}}>Mô tả</Text>}
+          value={request?.description}
           editable={false}
         />
         <TextInput

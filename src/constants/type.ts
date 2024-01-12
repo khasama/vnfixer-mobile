@@ -1087,7 +1087,7 @@ export interface ICategory {
 
 export interface IRequest {
   id?: number;
-  title: string;
+  // title: string;
   description: string;
   city: string;
   location: string;
