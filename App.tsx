@@ -1,18 +1,44 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { NavigationContainer } from "@react-navigation/native";
-import Home from "./src/screens/Home";
+import { NavigationContainer, useRoute } from "@react-navigation/native";
 import TabNavigator from "./src/navigators/TabNavigator";
+import { Provider } from "react-redux";
+import store from "./src/redux/store";
+import { useEffect, useRef } from "react";
+import * as Notifications from "expo-notifications";
+import Chatbot from "./src/components/Chatbot/Chatbot";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 export default function App() {
+  const responseListener = useRef<any>();
+
+  useEffect(() => {
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        const request = response.notification.request;
+        console.log({ request });
+      });
+    return () => {
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
   return (
-    <SafeAreaProvider>
-      <NavigationContainer>
-        <TabNavigator />
-        <StatusBar style="auto" />
-      </NavigationContainer>
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider style={{ position: "relative" }}>
+        <NavigationContainer>
+          <TabNavigator />
+          <StatusBar style="auto" />
+          <Chatbot />
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 

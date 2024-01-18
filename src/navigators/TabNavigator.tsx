@@ -1,12 +1,15 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import {
+  getFocusedRouteNameFromRoute,
+  useRoute,
+} from "@react-navigation/native";
 import {
   HomeStackNavigator,
   ProfileStackNavigator,
   ServiceStackNavigator,
-  AgencyStackNavigator,
+  NotificationStackNavigator,
 } from "./StackNavigator";
 import { View, Text } from "react-native";
 
@@ -14,7 +17,14 @@ const Tab = createBottomTabNavigator();
 
 const getRouteName = (route: any) => {
   const routeName = getFocusedRouteNameFromRoute(route);
-  if (routeName?.includes("AuthScreen")) {
+  if (
+    routeName?.includes("AuthScreen") ||
+    routeName?.includes("TakeRequestScreen") ||
+    routeName?.includes("InformationScreen") ||
+    routeName?.includes("MyRequestsScreen") ||
+    routeName?.includes("ManagerScreen") ||
+    routeName?.includes("AgencyScreen")
+  ) {
     return "none";
   }
   return "flex";
@@ -35,8 +45,8 @@ const TabNavigator = () => {
           } else if (route.name === "Service") {
             iconName = focused ? "construct" : "construct-outline";
             size = focused ? size + 5 : size;
-          } else if (route.name === "Agency") {
-            iconName = focused ? "people" : "people-outline";
+          } else if (route.name === "Notification") {
+            iconName = focused ? "notifications" : "notifications-outline";
             size = focused ? size + 5 : size;
           }
 
@@ -55,7 +65,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen name="Home" component={HomeStackNavigator} />
       <Tab.Screen name="Service" component={ServiceStackNavigator} />
-      <Tab.Screen name="Agency" component={AgencyStackNavigator} />
+      <Tab.Screen name="Notification" component={NotificationStackNavigator} />
       <Tab.Screen name="Profile" component={ProfileStackNavigator} />
     </Tab.Navigator>
   );
